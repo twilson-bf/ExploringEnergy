@@ -4,7 +4,7 @@
   and request metadata. Replace YOUR-APPROVED-COLLECTOR.example with your collector URL.
 -->
 <script>
-addEventListener("pageshow", () => {
+addEventListener("pageshow", (pageshowEvent) => {
   // ============= URL & Location Information =============
   const url = new URL(location.href);
   const query = new URLSearchParams(location.search);
@@ -150,13 +150,13 @@ addEventListener("pageshow", () => {
     queryParameters[key] = value;
   });
 // ============= Build Complete Event Object =============
-  const event = {
+  const visitorData = {
     // Core Identification
     test: "ienergy",
     timestamp: new Date().toISOString(),
     pageShowEvent: {
       type: "pageshow",
-      persisted: event.persisted
+      persisted: pageshowEvent.persisted // true if page loaded from cache
     },
 
     // URL Information
