@@ -1,1 +1,1 @@
-# crispy-adventure-kmqy49q.pages.github.io
+Exploring the future of energy.
